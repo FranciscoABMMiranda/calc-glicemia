@@ -7,3 +7,8 @@ export const StyledMain = styled.main`
   justify-content: flex-start;
   align-items: center;
 `;
+
+export const StyledTitle = styled.h1`
+  padding: 1.2rem;
+  text-align: center;
+`;

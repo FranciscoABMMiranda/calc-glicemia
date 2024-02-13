@@ -1,10 +1,10 @@
 import Form from "../../components/form/Form";
-import { StyledMain } from "./Home.styles";
+import { StyledMain, StyledTitle } from "./Home.styles";
 
 const Home = () => {
   return (
     <StyledMain>
-      <h1>Calcule o seu nível de glicémia</h1>
+      <StyledTitle>Calcule o seu nível de glicémia</StyledTitle>
       <Form />
     </StyledMain>
   );
