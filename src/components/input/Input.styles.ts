@@ -18,6 +18,5 @@ export const StyledContainer = styled.div`
 `;
 
 export const StyledLabel = styled.label`
-  /*   position: absolute; */
   font-size: 1.4rem;
 `;

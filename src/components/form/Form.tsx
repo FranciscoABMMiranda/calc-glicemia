@@ -1,4 +1,7 @@
-import { useState } from "react";
+import useFormData from "../../hooks/useFormData/useFormData";
+import { DataInputs } from "../../hooks/useFormData/useFormData.types";
+import { ValueType } from "../../types/dataTypes";
+import calulateInsuline from "../../utils/calculateInsuline";
 
 import {
   StyledContainer,
@@ -11,53 +14,25 @@ import {
   StyledDivider,
   StyledResult,
 } from "./Form.styles";
-import { ValueType } from "./Form.types";
 
-const MIN_CURR_GLI = 120;
-
-const isAnyNull = (arr: ValueType[]) => arr.some((item) => item === null);
-
-function calulateInsuline(
-  fsi: ValueType,
-  uhc: ValueType,
-  targetGli: ValueType,
-  currGli: ValueType,
-  hcFood: ValueType
-) {
-  if (
-    isAnyNull(Object.values<ValueType>(arguments)) ||
-    fsi === 0 ||
-    uhc === 0
-  ) {
-    return 0;
-  }
-
-  if (currGli! > MIN_CURR_GLI) {
-    return ((currGli! - targetGli!) / fsi! + hcFood! / uhc!).toFixed(1);
-  }
-
-  return (hcFood! / uhc!).toFixed(1);
-}
+const INPUTS = [
+  DataInputs.FSI,
+  DataInputs.TARGET_GLI,
+  DataInputs.UHC,
+  DataInputs.CURR_GLI,
+  DataInputs.HC_FOOD,
+];
 
 const Form = () => {
-  const [fsi, setFsi] = useState<ValueType>(
-    localStorage.getItem("fsi") ? Number(localStorage.getItem("fsi")) : null
-  );
-  const [uhc, setUhc] = useState<ValueType>(null);
-  const [targetGli, setTargetGli] = useState<ValueType>(
-    localStorage.getItem("targetGli")
-      ? Number(localStorage.getItem("targetGli"))
-      : null
-  );
-  const [currGli, setCurrGli] = useState<ValueType>(null);
-  const [hcFood, setHcFood] = useState<ValueType>(null);
+  const { fsi, uhc, targetGli, currGli, hcFood, dataSpec } = useFormData();
 
-  const total = calulateInsuline(fsi, uhc, targetGli, currGli, hcFood);
+  const total = calulateInsuline({ fsi, uhc, targetGli, currGli, hcFood });
 
   const handleChange =
     (setFunc: (value: ValueType) => void, storageKey?: string) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target;
+
       if (value.length) {
         storageKey && localStorage.setItem(storageKey, value);
         return setFunc(Number(value));
@@ -68,56 +43,48 @@ const Form = () => {
   return (
     <StyledContainer>
       <StyledForm>
-        <StyledInput
-          label="FSI"
-          type="number"
-          onChange={handleChange(setFsi, "fsi")}
-          {...(fsi ? { defaultValue: fsi } : {})}
-        />
-        <StyledInput
-          label="Equivalente Hidratos de Carbono"
-          type="number"
-          onChange={handleChange(setUhc)}
-          {...(uhc ? { defaultValue: uhc } : {})}
-        />
-        <StyledInput
-          label="Hidratos refeição"
-          type="number"
-          onChange={handleChange(setHcFood)}
-          {...(hcFood ? { defaultValue: hcFood } : {})}
-        />
-        <StyledInput
-          label="Glicemia atual"
-          type="number"
-          onChange={handleChange(setCurrGli)}
-          {...(currGli ? { defaultValue: currGli } : {})}
-        />
-        <StyledInput
-          label="Glicemia alvo"
-          type="number"
-          onChange={handleChange(setTargetGli, "targetGli")}
-          {...(targetGli ? { defaultValue: targetGli } : {})}
-        />
+        {INPUTS.map((inputKey) => (
+          <StyledInput
+            key={dataSpec[inputKey].label}
+            label={dataSpec[inputKey].label}
+            type="number"
+            onChange={handleChange(
+              dataSpec[inputKey].setFunc,
+              dataSpec[inputKey].localStorageKey
+            )}
+            {...(dataSpec[inputKey].defaultValue
+              ? { defaultValue: Number(dataSpec[inputKey].defaultValue) }
+              : {})}
+          />
+        ))}
       </StyledForm>
       <StyledCalc>
-        <StyledFrac isCancelled={!!currGli && currGli <= MIN_CURR_GLI}>
+        <StyledFrac
+          isCancelled={!!currGli && !!targetGli && currGli <= targetGli}
+        >
           <StyledLine>
-            <StyledSpan>{`(${currGli ?? "Glicemia atual"} -`}</StyledSpan>
-            <StyledSpan>{`${targetGli ?? "Glicemia alvo"})`}</StyledSpan>
+            <StyledSpan>{`(${
+              currGli ?? dataSpec[DataInputs.CURR_GLI].label
+            } -`}</StyledSpan>
+            <StyledSpan>{`${
+              targetGli ?? dataSpec[DataInputs.CURR_GLI].label
+            })`}</StyledSpan>
           </StyledLine>
           <StyledDivider />
           <StyledLine>
-            <StyledSpan>{fsi ?? "FSI"}</StyledSpan>
+            <StyledSpan>{fsi ?? dataSpec[DataInputs.FSI].label}</StyledSpan>
           </StyledLine>
         </StyledFrac>
         <StyledSpan>{" + "}</StyledSpan>
         <StyledFrac>
           <StyledLine>
-            <StyledSpan>{hcFood ?? "Hidratos refeição"}</StyledSpan>
+            <StyledSpan>
+              {hcFood ?? dataSpec[DataInputs.HC_FOOD].label}
+            </StyledSpan>
           </StyledLine>
           <StyledDivider />
           <StyledLine>
-            <StyledSpan>{uhc ?? "Equivalente Hidratos de Carbono"}</StyledSpan>
+            <StyledSpan>{uhc ?? dataSpec[DataInputs.UHC].label}</StyledSpan>
           </StyledLine>
         </StyledFrac>
         <StyledSpan>{" = "}</StyledSpan>
