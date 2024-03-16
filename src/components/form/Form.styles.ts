@@ -6,7 +6,8 @@ import Input from "../input/Input";
 import { FracStyleProps } from "./Form.types";
 
 export const StyledContainer = styled.section`
-  margin: 0 1.2rem;
+  padding: 2.4rem;
+  width: 100%;
 `;
 
 export const StyledForm = styled.form`
@@ -78,7 +79,7 @@ export const StyledLine = styled.div`
 `;
 
 export const StyledSpan = styled.span`
-  font-size: 1.6rem;
+  font-size: 1.8rem;
 
   &:not(:first-child) {
     margin-left: 0.4rem;

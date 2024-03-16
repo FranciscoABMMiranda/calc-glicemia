@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import * as media from "../../styles/custom-media.styles";
+
 export const StyledContainer = styled.div`
   position: relative;
   display: flex;
@@ -24,4 +26,9 @@ export const StyledSection = styled.section`
   z-index: 1;
   border-radius: 1rem;
   background-color: grey;
+
+  ${media.mobileMedia} {
+    left: 2.4rem;
+    bottom: 0;
+  }
 `;

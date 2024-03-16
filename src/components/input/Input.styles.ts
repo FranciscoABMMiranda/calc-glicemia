@@ -1,14 +1,20 @@
 import styled from "styled-components";
 
+import * as media from "../../styles/custom-media.styles";
+
 export const StyledInput = styled.input`
   width: 16rem;
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   padding: 0.8rem;
   border: 0;
   border-radius: 0.4rem;
 
   &:focus {
     outline: none;
+  }
+
+  ${media.mobileMedia} {
+    width: 100%;
   }
 `;
 
