@@ -47,6 +47,7 @@ const Form = () => {
           <StyledInput
             key={dataSpec[inputKey].label}
             label={dataSpec[inputKey].label}
+            description={dataSpec[inputKey].description}
             type="number"
             onChange={handleChange(
               dataSpec[inputKey].setFunc,
