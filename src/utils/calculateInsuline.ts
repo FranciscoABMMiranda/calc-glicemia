@@ -21,10 +21,10 @@ function calulateInsuline({ fsi, uhc, targetGli, currGli, hcFood }: ArgTypes) {
   }
 
   if (currGli! > targetGli!) {
-    return ((currGli! - targetGli!) / fsi! + hcFood! / uhc!).toFixed(1);
+    return ((currGli! - targetGli!) / fsi! + hcFood! * uhc!).toFixed(1);
   }
 
-  return (hcFood! / uhc!).toFixed(1);
+  return (hcFood! * uhc!).toFixed(1);
 }
 
 export default calulateInsuline;

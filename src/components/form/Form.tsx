@@ -82,9 +82,7 @@ const Form = () => {
             <StyledSpan>
               {hcFood ?? dataSpec[DataInputs.HC_FOOD].label}
             </StyledSpan>
-          </StyledLine>
-          <StyledDivider />
-          <StyledLine>
+            <StyledSpan>{" x "}</StyledSpan>
             <StyledSpan>{uhc ?? dataSpec[DataInputs.UHC].label}</StyledSpan>
           </StyledLine>
         </StyledFrac>
