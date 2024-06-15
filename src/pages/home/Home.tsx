@@ -4,7 +4,9 @@ import { StyledMain, StyledTitle } from "./Home.styles";
 const Home = () => {
   return (
     <StyledMain>
-      <StyledTitle>Calcule o seu nível de glicémia</StyledTitle>
+      <StyledTitle>
+        Calcule oa quantidade de insulina que deve tomar
+      </StyledTitle>
       <Form />
     </StyledMain>
   );
